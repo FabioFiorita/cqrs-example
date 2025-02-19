@@ -1,7 +1,7 @@
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { CreateSchoolCommand } from '../commands/create-school.command';
 import { SchoolRepository } from '../repositories/school.repository';
-import { mapCreateSchoolDtoToPrisma } from '../mappers/map-create-school-dto-to-prisma';
+import { mapCreateSchoolDtoToPrisma } from '../mappers/map-create-school-dto-to-prisma.mapper';
 import { SchoolService } from '../services/school.service';
 import { Logger } from '@nestjs/common';
 
@@ -17,7 +17,7 @@ export class CreateSchoolHandler
   ) {}
 
   async execute(command: CreateSchoolCommand) {
-    const { createSchoolDto } = command;
+    const { createSchoolDto } = command.params;
 
     try {
       // Check if the school name is already taken

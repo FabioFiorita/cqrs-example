@@ -5,10 +5,12 @@ interface MakeSchoolProps {
 }
 
 export function makeSchool({ overrides }: MakeSchoolProps): School {
-  return {
+  const school: School = {
     id: 1,
     name: 'Test School',
     address: 'Test Address',
     ...overrides,
   };
+
+  return school;
 }

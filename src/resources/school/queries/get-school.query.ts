@@ -1,3 +1,3 @@
 export class GetSchoolQuery {
-  constructor(public readonly id: string) {}
+  constructor(public readonly params: { id: string }) {}
 }
