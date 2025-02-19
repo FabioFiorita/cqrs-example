@@ -32,6 +32,7 @@ model Student {
   schoolId    Int
   school      School       @relation(fields: [schoolId], references: [id])
   enrollments Enrollment[]
+  Payment     Payment[]
 }
 
 model Class {
@@ -51,4 +52,12 @@ model Enrollment {
   student   Student  @relation(fields: [studentId], references: [id])
   class     Class    @relation(fields: [classId], references: [id])
   createdAt DateTime @default(now())
+}
+
+model Payment {
+  id        Int      @id @default(autoincrement())
+  amount    Float
+  date      DateTime @default(now())
+  studentId Int
+  student   Student  @relation(fields: [studentId], references: [id])
 }
