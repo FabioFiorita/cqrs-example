@@ -19,7 +19,7 @@ export class SchoolRepository {
     skip?: number;
     take?: number;
   }) {
-    return this.prisma.school.findMany({
+    return await this.prisma.school.findMany({
       where: whereClause,
       include: includeClause,
       orderBy: orderByClause,
@@ -35,14 +35,14 @@ export class SchoolRepository {
     whereClause: Prisma.SchoolWhereInput;
     includeClause?: Prisma.SchoolInclude;
   }) {
-    return this.prisma.school.findFirst({
+    return await this.prisma.school.findFirst({
       where: whereClause,
       include: includeClause,
     });
   }
 
   async create({ data }: { data: Prisma.SchoolCreateInput }) {
-    return this.prisma.school.create({
+    return await this.prisma.school.create({
       data,
     });
   }
@@ -54,7 +54,7 @@ export class SchoolRepository {
     whereClause: Prisma.SchoolWhereUniqueInput;
     data: Prisma.SchoolUpdateInput;
   }) {
-    return this.prisma.school.update({
+    return await this.prisma.school.update({
       where: whereClause,
       data,
     });
@@ -65,7 +65,7 @@ export class SchoolRepository {
   }: {
     whereClause: Prisma.SchoolWhereUniqueInput;
   }) {
-    return this.prisma.school.delete({
+    return await this.prisma.school.delete({
       where: whereClause,
     });
   }

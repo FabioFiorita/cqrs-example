@@ -4,6 +4,7 @@ import { SchoolRepository } from '../repositories/school.repository';
 import { mapCreateSchoolDtoToPrisma } from '../mappers/map-create-school-dto-to-prisma.mapper';
 import { SchoolService } from '../services/school.service';
 import { Logger } from '@nestjs/common';
+import { mapSchoolToDto } from '../mappers/map-prisma-school-to-dto.mapper';
 
 @CommandHandler(CreateSchoolCommand)
 export class CreateSchoolHandler
@@ -27,9 +28,13 @@ export class CreateSchoolHandler
       const schoolData = mapCreateSchoolDtoToPrisma(createSchoolDto);
 
       // Create the school
-      await this.schoolRepository.create({ data: schoolData });
+      const createdSchool = await this.schoolRepository.create({
+        data: schoolData,
+      });
 
       this.logger.log('School created successfully');
+
+      return mapSchoolToDto(createdSchool);
     } catch (error) {
       this.logger.error('Failed to create school', error.stack);
       throw error;
