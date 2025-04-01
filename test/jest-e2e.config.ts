@@ -13,7 +13,7 @@ const config: Config = {
   moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths, {
     prefix: '<rootDir>/',
   }),
-  globalSetup: '<rootDir>/test/setup-e2e.ts',
+  setupFilesAfterEnv: ['<rootDir>/test/setup-e2e.ts'],
 };
 
 export default config;

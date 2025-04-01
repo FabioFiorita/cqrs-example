@@ -1,36 +1,20 @@
-import { PrismaClient } from '@prisma/client';
-import { randomUUID } from 'node:crypto';
 import { execSync } from 'node:child_process';
+import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
-export function generateUniqueDatabaseURL(schemaId: string) {
+export default async () => {
   if (!process.env.DATABASE_URL) {
     throw new Error('Please provide a DATABASE_URL environment variable');
   }
 
-  const url = new URL(process.env.DATABASE_URL);
+  // Drop and recreate the schema using Prisma
+  await prisma.$executeRawUnsafe('DROP SCHEMA IF EXISTS test_schema CASCADE');
+  await prisma.$executeRawUnsafe('CREATE SCHEMA test_schema');
 
-  url.searchParams.set('schema', schemaId);
-
-  return url.toString();
-}
-
-const schemaId = randomUUID();
-
-module.exports = async () => {
-  const databaseURL = generateUniqueDatabaseURL(schemaId);
-
-  process.env.DATABASE_URL = databaseURL;
-
+  // Run migrations in the test schema
   execSync('pnpm prisma migrate deploy');
 
-  global.__SCHEMA_ID__ = schemaId;
-};
-
-module.exports.teardown = async () => {
-  await prisma.$executeRawUnsafe(
-    `DROP SCHEMA IF EXISTS "${global.__SCHEMA_ID__}" CASCADE`,
-  );
   await prisma.$disconnect();
+  console.log('Test database setup completed');
 };
